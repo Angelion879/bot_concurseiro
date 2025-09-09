@@ -3,6 +3,9 @@ __pycache__/
 *.py[codz]
 *$py.class
 
+#key and token files
+keys.py
+
 # C extensions
 *.so
 
