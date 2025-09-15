@@ -18,7 +18,11 @@ json_array_obj = soup.select('#_br_com_seatecnologia_in_buscadou_BuscaDouPortlet
 
 json01 = json.loads(json_array_obj)
 
-with open(f'output.json', 'w', encoding='utf-8') as file:
-    json.dump(json01, file, indent=4, ensure_ascii=False)
+for i in json01['jsonArray']:
+    inst = i['hierarchyStr']
+    link = "https://www.in.gov.br/web/dou/-/"+i['urlTitle']
+
+    if 'Tribunal' in inst:
+        print(f'Tem aqui: {link}\n\n')
 
 print('done')
