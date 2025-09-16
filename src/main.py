@@ -1,28 +1,38 @@
+"""Main function file"""
 import os
+import json
 import requests
 from bs4 import BeautifulSoup as bs
+import page_flipper as pf
+import scrapper as s
 
-import json
+def build_news_lists():
+    """builts the message to send through ntfy"""
+    court_content = [["TRIBUNAIS:"]]
+    police_content = [["POLICIA:"]]
 
-try:
-    SITE = os.environ["ADDRESS"]
-except KeyError:
-    from keys import address
-    SITE = address
+    available_pages = pf.create_page_link_list()
 
-res = requests.get(SITE)
-soup = bs(res.content, 'html.parser')
-#pages = soup.select('.page-link')
+    for url in available_pages:
+        j_array = s.get_json_content(url)
+        for json_dict in s.json_array_handler(j_array):
+            t = s.filter_through_content(json_dict,'Tribunal')
+            if t:
+                court_content.append(t)
+            p = s.filter_through_content(json_dict,'Polícia')
+            if p:
+                police_content.append(p)
 
-json_array_obj = soup.select('#_br_com_seatecnologia_in_buscadou_BuscaDouPortlet_params')[0].get_text().replace('\n','').replace('\t','')
+    return court_content, police_content
 
-json01 = json.loads(json_array_obj)
+def message_builder():
+    """builds the str for the ntfy message"""
+    court_news, police_news = build_news_lists()
 
-for i in json01['jsonArray']:
-    inst = i['hierarchyStr']
-    link = "https://www.in.gov.br/web/dou/-/"+i['urlTitle']
+    message_part1 = '\n\n'.join(str('\n - '.join(str(j)for j in i)) for i in court_news)
+    message_part2 = '\n\n'.join(str('\n - '.join(str(j)for j in i)) for i in police_news)
 
-    if 'Tribunal' in inst:
-        print(f'Tem aqui: {link}\n\n')
+    return message_part1+"\n\n"+message_part2
 
-print('done')
+if __name__ == '__main__':
+    print(message_builder())
