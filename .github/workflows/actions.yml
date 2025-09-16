@@ -1,0 +1,30 @@
+name: run script
+
+on:
+    schedule:
+        - cron: '5 22 * * *' # Everyday at 7:05pm Brzil time / 10:05pm UTC
+
+jobs:
+
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - name: checkout repo content
+              uses: actions/checkout@v2
+            
+            - name: setup python
+              uses: actions/setup-python@v4
+              with:
+                python-version: '3.12'
+            
+            - name: install python packages
+              run: |
+                python -m pip install --upgrade pip
+                pip install -r requirements.txt
+
+            - name: execute py script
+              env:
+                SECRET_CHANNEL: ${{ secrets.SECRET_CHANNEL }}
+              run: |
+                cd src
+                python main.py
