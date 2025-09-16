@@ -1,6 +1,7 @@
 name: run script
 
 on:
+    push:
     schedule:
         - cron: '5 22 * * *' # Everyday at 7:05pm Brzil time / 10:05pm UTC
 
