@@ -18,7 +18,7 @@ def get_json_content(page_url):
     return json_array
 
 def json_array_handler(json_array):
-    """generator to return a dict per time"""
+    """generator to return a dict a time"""
     for j_dict in json_array:
         yield j_dict
 
