@@ -24,18 +24,10 @@ def get_available_tenders(http_response, area):
 
     return tenders
 
-def filter_tenders_by_role(tenders):
-    """returns a filtered list of tenders based on the wanted role"""
-
-    bbb = tenders[0].next_sibling.next_sibling.next_sibling.next_sibling
-    ccc = bbb.select('li')[2].string
-    return ccc
-
 
 if __name__ == '__main__':
     response = http_request('https://blog.grancursosonline.com.br/concursos-2026/')
     #print(response.status_code)
 
-    tender_list = get_available_tenders(response.content, "PC")
-    aaa = filter_tenders_by_role(tender_list)
-    print(aaa)
+    body = get_available_tenders(response.content, "PC")
+    print(body)
