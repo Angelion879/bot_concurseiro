@@ -9,8 +9,8 @@ class TestScrapper:
 
     def test_get_available_tenders(self):
         """should return a list with available tenders filtered by an determined area"""
-
+        AREA = "TRT"
         EXPECTED = '[<h4><a href="https://exemple.com" rel="noopener" target="_blank">Concurso TRT PI</a></h4>, <h4><a href="https://exemple.com" rel="noopener" target="_blank">Concurso TRT RS</a></h4>, <h4><a href="https://exemple.com" rel="noopener" target="_blank">Concurso TRT MT</a></h4>, <h4><a href="https://exemple.com" rel="noopener" target="_blank">Concurso TRT PR</a></h4>]'
 
-        actual = s.get_available_tenders(self.mock_website, "TRT")
+        actual = s.get_available_tenders(self.mock_website, AREA)
         assert EXPECTED == str(actual)
