@@ -20,8 +20,9 @@ class TestScrapper:
         """should return a list of tenders (and their data) that have the chosen role"""
         AREA = "TJ"
         ROLE = "Oficial de Justiça"
-        EXPECTED = "[['Concurso TJ AL', 'Situação atual: comissão formada', 'https://exemple.com'], ['Concurso TJ PB', 'Situação atual: comissão formada', 'https://exemple.com']]"
+        EXPECTED = [['Concurso TJ AL', 'Situação atual: comissão formada', 'https://exemple.com'],
+                    ['Concurso TJ PB', 'Situação atual: comissão formada', 'https://exemple.com']]
 
         testing_tenders = s.get_available_tenders(self.mock_website, AREA)
         actual = s.filter_tenders_by_role(testing_tenders, ROLE)
-        assert EXPECTED == str(actual)
+        assert EXPECTED == actual
