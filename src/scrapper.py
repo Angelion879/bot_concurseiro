@@ -4,6 +4,16 @@ import re
 import requests
 from bs4 import BeautifulSoup as bs
 
+URL = 'https://blog.grancursosonline.com.br/concursos-2026/'
+
+def scrapper(area, role):
+    """handles the other functions and their needs"""
+
+    http_res = http_request(URL)
+    tender_list = get_available_tenders(http_res.content, area)
+    filtered_list = filter_tenders_by_role(tender_list, role)
+
+    return filtered_list
 
 def http_request(page_url):
     """handles the http request"""
@@ -20,8 +30,8 @@ def http_request(page_url):
 
 def get_available_tenders(http_response, area):
     """returns a list with all available tenders in the determined area"""
-    html_content = bs(http_response, 'html.parser')
 
+    html_content = bs(http_response, 'html.parser')
     tenders = html_content.find_all("h4", string=re.compile(area))
 
     return tenders
@@ -29,6 +39,7 @@ def get_available_tenders(http_response, area):
 
 def filter_tenders_by_role(tenders, role):
     """returns a filtered list of tenders based on the wanted role"""
+
     filtered = []
 
     for i, item in enumerate(tenders):
@@ -45,10 +56,5 @@ def filter_tenders_by_role(tenders, role):
 
 
 if __name__ == '__main__':
-    response = http_request(
-        'https://blog.grancursosonline.com.br/concursos-2026/')
-    # print(response.status_code)
-
-    tender_list = get_available_tenders(response.content, "PC")
-    aaa = filter_tenders_by_role(tender_list, "Perito Criminal")
+    aaa = scrapper("PC", "Perito Criminal")
     print(aaa)
