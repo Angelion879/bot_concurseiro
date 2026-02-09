@@ -1,14 +1,15 @@
 """Main function file"""
 import os
+import time
 import requests
 
-def build_news_lists():
-    """builts the message to send through ntfy"""
-    pass
+def get_todays_date():
+    """returns the current date on a YYYY.MM.DD format"""
 
-def message_builder():
-    """builds the str for the ntfy message"""
-    pass
+    date = str(time.localtime().tm_year), str(time.localtime().tm_mon), str(time.localtime().tm_mday)
+    current_date = ".".join(date)
+
+    return current_date
 
 def ntfy_message_sender(message):
     try:
@@ -25,7 +26,4 @@ def ntfy_message_sender(message):
         }, timeout=10)
 
 if __name__ == '__main__':
-    news = "aaa"
-    print(news)
-
-    ntfy_message_sender(news)
+    print('aaa')
