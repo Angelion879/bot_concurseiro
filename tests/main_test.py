@@ -5,9 +5,9 @@ from src import scrapper, main
 class TestMain:
     """Contains the tests fot the main file functions"""
 
-    with open('tests\\mock_site.html', 'r', encoding='utf-8') as file:
+    with open('tests\\mocks\\mock_site.html', 'r', encoding='utf-8') as file:
         mock_website = file.read()
-    
+
     #boilerplate
     AREA = "TJ"
     ROLE = "Oficial de Justiça"

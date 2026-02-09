@@ -4,7 +4,7 @@ from src import scrapper as s
 
 class TestScrapper:
     """Contains the tests fot the scrapper features"""
-    with open('tests\\mock_site.html', 'r', encoding='utf-8') as file:
+    with open('tests\\mocks\\mock_site.html', 'r', encoding='utf-8') as file:
         mock_website = file.read()
 
     def test_get_available_tenders(self):
