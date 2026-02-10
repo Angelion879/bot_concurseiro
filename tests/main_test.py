@@ -19,14 +19,14 @@ class TestMain:
         not_updated = "tests\\mocks\\mock_non_updated.txt"
         actual = main.there_is_new_content(not_updated, self.filtered)
 
-        assert True == actual
+        assert actual is True
 
     def test_there_is_no_new_content(self):
         """should return FALSE if the content collected is the SAME from the previously saved"""
         updated = "tests\\mocks\\mock_updated.txt"
         actual = main.there_is_new_content(updated, self.filtered)
 
-        assert False == actual
+        assert actual is False
 
     def test_update_doc_with_tenders_info(self):
         """should update document with new acquired content"""
