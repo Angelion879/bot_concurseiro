@@ -27,3 +27,23 @@ class TestMain:
         actual = main.there_is_new_content(updated, self.filtered)
 
         assert False == actual
+
+    def test_update_doc_with_tenders_info(self):
+        """should update document with new acquired content"""
+        testing_file = "tests\\mocks\\mock_non_updated.txt"
+
+        with open(testing_file, "r", encoding='utf-8') as file:
+            not_updated = file.read()
+            file.close()
+        main.update_doc_with_tenders_info(testing_file, self.filtered)
+
+        with open(testing_file, "r", encoding='utf-8') as f:
+            updated = f.read()
+            f.close()
+
+        assert not_updated != updated
+
+    # returning not_updated file to original state
+        with open(testing_file, "w", encoding='utf-8') as ending:
+            ending.write(not_updated)
+            ending.close()
