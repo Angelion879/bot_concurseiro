@@ -24,6 +24,17 @@ def there_is_new_content(stored, new_content):
         file.close()
     return False
 
+def update_doc_with_tenders_info(stored, filtered_content):
+    """updates the document with the daily date and tenders contents"""
+
+    today_date = get_todays_date()
+    with open(stored, "w", encoding='utf-8') as file:
+        file.write(today_date)
+        file.write("\n\n")
+
+        for i in filtered_content:
+            file.write(str(i) + "\n")
+
 def ntfy_message_sender(message):
     try:
         CHAN = os.environ["SECRET_CHANNEL"]
