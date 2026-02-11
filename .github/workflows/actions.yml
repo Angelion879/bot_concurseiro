@@ -35,6 +35,7 @@ jobs:
 
     build:
         runs-on: ubuntu-latest
+        needs: test
         steps:
             - name: checkout repo content
               uses: actions/checkout@v2
