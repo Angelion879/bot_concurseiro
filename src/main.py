@@ -1,6 +1,7 @@
 """Main function file"""
 import time
-from src import scrap, messenger
+import scrap
+import messenger
 
 STORAGE = "Last_update.txt"
 AREA = "PC"
