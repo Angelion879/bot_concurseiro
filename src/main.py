@@ -1,7 +1,10 @@
 """Main function file"""
-import os
 import time
-import requests
+import scrapper, messenger
+
+STORAGE = "Last_update.txt"
+AREA = "PC"
+ROLE = "Perito Criminal"
 
 def get_todays_date():
     """returns the current date on a YYYY.MM.DD format"""
@@ -35,19 +38,11 @@ def update_doc_with_tenders_info(stored, filtered_content):
         for i in filtered_content:
             file.write(str(i) + "\n")
 
-def ntfy_message_sender(message):
-    try:
-        CHAN = os.environ["SECRET_CHANNEL"]
-    except KeyError:
-        from keys import channel
-        CHAN = channel
-
-    requests.post(f"https://{CHAN}",
-        data=f"{message}",
-        headers={
-            "Title": "Concursos Atualizados!",
-            "Tags": "memo",
-        }, timeout=10)
-
 if __name__ == '__main__':
-    print('aaa')
+    # link it all together
+    daily_content = scrapper.scrapper(AREA, ROLE)
+    if there_is_new_content(STORAGE, daily_content):
+        messenger.ntfy_message_sender(daily_content)
+
+    update_doc_with_tenders_info(STORAGE, daily_content)
+    print('done!')
