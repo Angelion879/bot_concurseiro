@@ -1,4 +1,4 @@
-from src import scrapper, messenger
+from src import scrap, messenger
 
 
 class TestMessenger:
@@ -10,8 +10,8 @@ class TestMessenger:
     #boilerplate
     AREA = "TJ"
     ROLE = "Oficial de Justiça"
-    available = scrapper.get_available_tenders(mock_website, AREA)
-    filtered = scrapper.filter_tenders_by_role(available, ROLE)
+    available = scrap.get_available_tenders(mock_website, AREA)
+    filtered = scrap.filter_tenders_by_role(available, ROLE)
 
     def test_message_builder(self):
         """should return a string with the structured content"""

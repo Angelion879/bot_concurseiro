@@ -1,4 +1,4 @@
-from src import scrapper as s
+from src import scrap as s
 
 
 class TestScrapper:

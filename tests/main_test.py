@@ -1,5 +1,4 @@
-from src import scrapper, main
-
+from src import main, scrap
 
 class TestMain:
     """Contains the tests fot the main file functions"""
@@ -10,8 +9,8 @@ class TestMain:
     #boilerplate
     AREA = "TJ"
     ROLE = "Oficial de Justiça"
-    available = scrapper.get_available_tenders(mock_website, AREA)
-    filtered = scrapper.filter_tenders_by_role(available, ROLE)
+    available = scrap.get_available_tenders(mock_website, AREA)
+    filtered = scrap.filter_tenders_by_role(available, ROLE)
 
     def test_there_is_new_content(self):
         """should return TRUE if the content collected is DIFFERENT from the previously saved"""
