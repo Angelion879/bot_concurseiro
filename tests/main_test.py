@@ -1,9 +1,12 @@
+from pathlib import Path
 from src import main, scrap
+
+base_dir = Path("tests/mocks")
 
 class TestMain:
     """Contains the tests fot the main file functions"""
 
-    with open('tests\\mocks\\mock_site.html', 'r', encoding='utf-8') as file:
+    with open(base_dir/'mock_site.html', 'r', encoding='utf-8') as file:
         mock_website = file.read()
 
     #boilerplate
@@ -14,21 +17,21 @@ class TestMain:
 
     def test_there_is_new_content(self):
         """should return TRUE if the content collected is DIFFERENT from the previously saved"""
-        not_updated = "tests\\mocks\\mock_non_updated.txt"
+        not_updated = base_dir/"mock_non_updated.txt"
         actual = main.there_is_new_content(not_updated, self.filtered)
 
         assert actual is True
 
     def test_there_is_no_new_content(self):
         """should return FALSE if the content collected is the SAME from the previously saved"""
-        updated = "tests\\mocks\\mock_updated.txt"
+        updated = base_dir/"mock_updated.txt"
         actual = main.there_is_new_content(updated, self.filtered)
 
         assert actual is False
 
     def test_update_doc_with_tenders_info(self):
         """should update document with new acquired content"""
-        testing_file = "tests\\mocks\\mock_non_updated.txt"
+        testing_file = base_dir/"mock_non_updated.txt"
 
         with open(testing_file, "r", encoding='utf-8') as file:
             not_updated = file.read()

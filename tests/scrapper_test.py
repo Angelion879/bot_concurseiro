@@ -1,9 +1,11 @@
+from pathlib import Path
 from src import scrap as s
 
+base_dir = Path("tests/mocks")
 
 class TestScrapper:
     """Contains the tests fot the scrapper features"""
-    with open('tests\\mocks\\mock_site.html', 'r', encoding='utf-8') as file:
+    with open(Path(base_dir/'mock_site.html').resolve(), 'r', encoding='utf-8') as file:
         mock_website = file.read()
 
     def test_get_available_tenders(self):

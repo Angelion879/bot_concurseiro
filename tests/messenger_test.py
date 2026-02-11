@@ -1,10 +1,12 @@
+from pathlib import Path
 from src import scrap, messenger
 
+base_dir = Path("tests/mocks")
 
 class TestMessenger:
     """Contains the tests fot the messenger file features"""
 
-    with open('tests\\mocks\\mock_site.html', 'r', encoding='utf-8') as file:
+    with open(base_dir/'mock_site.html', 'r', encoding='utf-8') as file:
         mock_website = file.read()
 
     #boilerplate
