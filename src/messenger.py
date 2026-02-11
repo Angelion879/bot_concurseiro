@@ -27,7 +27,7 @@ def ntfy_message_sender(news_content):
     requests.post(f"https://{CHAN}",
         data=body.encode('utf-8'),
         headers={
-            "Title": "Test Message!",
+            "Title": "Concursos Atualizados!",
             "Tags": "memo",
             "Markdown": "yes"
         }, timeout=10)
