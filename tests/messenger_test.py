@@ -1,5 +1,5 @@
 from pytest import *
-from src import scrapper, main
+from src import scrapper, messenger
 
 
 class TestMessenger:
@@ -13,3 +13,10 @@ class TestMessenger:
     ROLE = "Oficial de Justiça"
     available = scrapper.get_available_tenders(mock_website, AREA)
     filtered = scrapper.filter_tenders_by_role(available, ROLE)
+
+    def test_message_builder(self):
+        """should return a string with the structured content"""
+        EXPECTED = "## [Concurso TJ AL](https://exemple.com)\nSituação atual: comissão formada\n\n## [Concurso TJ PB](https://exemple.com)\nSituação atual: comissão formada"
+
+        actual = messenger.message_builder(self.filtered)
+        assert EXPECTED == actual
