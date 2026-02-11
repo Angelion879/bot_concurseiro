@@ -53,7 +53,7 @@ jobs:
               env:
                 SECRET_CHANNEL: ${{ secrets.SECRET_CHANNEL }}
               run: |
-                python src\main.py
+                python src/main.py
 
             - name: commit updates to storage file
               run: |
