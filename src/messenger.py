@@ -21,7 +21,7 @@ def ntfy_message_sender(news_content):
     try:
         CHAN = os.environ["SECRET_CHANNEL"]
     except KeyError:
-        from keys import channel
+        from .keys import channel
         CHAN = channel
 
     requests.post(f"https://{CHAN}",
