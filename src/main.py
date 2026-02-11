@@ -1,7 +1,7 @@
 """Main function file"""
 import time
-import scrap
-import messenger
+from .scrap import scrapper
+from .messenger import ntfy_message_sender
 
 STORAGE = "Last_update.txt"
 AREA = "PC"
@@ -41,9 +41,9 @@ def update_doc_with_tenders_info(stored, filtered_content):
 
 if __name__ == '__main__':
     # link it all together
-    daily_content = scrap.scrapper(AREA, ROLE)
+    daily_content = scrapper(AREA, ROLE)
     if there_is_new_content(STORAGE, daily_content):
-        messenger.ntfy_message_sender(daily_content)
+        ntfy_message_sender(daily_content)
 
     update_doc_with_tenders_info(STORAGE, daily_content)
     print('done!')
