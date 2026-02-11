@@ -1,4 +1,3 @@
-from pytest import *
 from src import scrapper as s
 
 
