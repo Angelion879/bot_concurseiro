@@ -4,10 +4,34 @@ on:
     label:
       types:
         - deleted
-    # schedule:
-    #     - cron: '5 22 * * *' # Everyday at 7:05pm Brzil time / 10:05pm UTC
+    schedule:
+        - cron: '5 22 * * *' # Everyday at 7:05pm Brzil time / 10:05pm UTC
+    push:
+      branches:
+        - 'main'
 
 jobs:
+
+    test:
+      runs-on: ubuntu-latest
+      steps:
+
+        - name: checkout repo content
+          uses: actions/checkout@v2 # checkout the repository content to github runner
+    
+        - name: setup python
+          uses: actions/setup-python@v4
+          with:
+            python-version: '3.12' # install the python version needed
+            
+        - name: install python packages
+          run: |
+            python -m pip install --upgrade pip
+            pip install -r requirements.txt
+
+        - name: run tests
+          run: |
+            pytest
 
     build:
         runs-on: ubuntu-latest
@@ -29,5 +53,11 @@ jobs:
               env:
                 SECRET_CHANNEL: ${{ secrets.SECRET_CHANNEL }}
               run: |
-                cd src
-                python main.py
+                python src\main.py
+
+            - name: commit updates to storage file
+              run: |
+                git config --global user.name 'Angelion879'
+                git config --global user.email 'Angelion879@users.noreply.github.com'
+                git commit -am "Automated report"
+                git push
