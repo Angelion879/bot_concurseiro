@@ -41,6 +41,7 @@ def filter_tenders_by_role(tenders, role):
     """returns a filtered list of tenders based on the wanted role"""
 
     filtered = []
+    MULTIPLE = "diversos"
 
     for i, item in enumerate(tenders):
         tender_data = tenders[i].next_sibling.next_sibling.next_sibling.next_sibling
@@ -52,7 +53,24 @@ def filter_tenders_by_role(tenders, role):
                 data_list[0].string,
                 item.select('a')[0].get('href', None)
             ])
+        elif (MULTIPLE in data_list[2].string.lower()) or (MULTIPLE in data_list[3].string.lower()):
+            if handle_tender_with_multiple_roles(item.select('a')[0].get('href', None), role):
+                filtered.append([
+                    item.string,
+                    data_list[0].string,
+                    item.select('a')[0].get('href', None)
+                ])
+
     return filtered
+
+def handle_tender_with_multiple_roles(tender_url, role):
+    """when the tender does not have the roles in the description, visit its page to check"""
+
+    div_response = http_request(tender_url)
+    tender_content = bs(div_response.content, 'html.parser')
+    is_role_there = tender_content.find(string=re.compile(role))
+
+    return True if is_role_there else False
 
 
 if __name__ == '__main__':
