@@ -8,6 +8,9 @@ class TestScrapper:
     with open(Path(base_dir/'mock_site.html').resolve(), 'r', encoding='utf-8') as file:
         mock_website = file.read()
 
+    with open(Path(base_dir/'mock_tender_page.html').resolve(), 'r', encoding='utf-8') as file2:
+        mock_tender_page = file2.read()
+
     def test_get_available_tenders(self):
         """should return a list with available tenders filtered by an determined area"""
         AREA = "TRT"
@@ -27,3 +30,15 @@ class TestScrapper:
         testing_tenders = s.get_available_tenders(self.mock_website, AREA)
         actual = s.filter_tenders_by_role(testing_tenders, ROLE)
         assert EXPECTED == actual
+
+    def test_multiple_roles_with_selected(self):
+        """Should return TRUE when role IS found in tender's page"""
+        actual = s.handle_tender_with_multiple_roles(self.mock_tender_page, "Oficial de Justiça")
+
+        assert actual is True
+
+    def test_multiple_roles_without_selected(self):
+        """Should return FALSE when role is NOT found in tender's page"""
+        actual = s.handle_tender_with_multiple_roles(self.mock_tender_page, "Perito Criminal")
+
+        assert actual is False
