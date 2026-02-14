@@ -54,7 +54,9 @@ def filter_tenders_by_role(tenders, role):
                 item.select('a')[0].get('href', None)
             ])
         elif (MULTIPLE in data_list[2].string.lower()) or (MULTIPLE in data_list[3].string.lower()):
-            if handle_tender_with_multiple_roles(item.select('a')[0].get('href', None), role):
+            tender_page_url = item.select('a')[0].get('href', None)
+            page_response = http_request(tender_page_url)
+            if handle_tender_with_multiple_roles(page_response.content, role):
                 filtered.append([
                     item.string,
                     data_list[0].string,
@@ -63,11 +65,10 @@ def filter_tenders_by_role(tenders, role):
 
     return filtered
 
-def handle_tender_with_multiple_roles(tender_url, role):
+def handle_tender_with_multiple_roles(tender_page, role):
     """when the tender does not have the roles in the description, visit its page to check"""
 
-    div_response = http_request(tender_url)
-    tender_content = bs(div_response.content, 'html.parser')
+    tender_content = bs(tender_page, 'html.parser')
     is_role_there = tender_content.find(string=re.compile(role))
 
     return True if is_role_there else False
