@@ -52,23 +52,24 @@ def filter_tenders_by_role(tenders, role):
     for i, item in enumerate(tenders):
         tender_data = tenders[i].next_sibling.next_sibling.next_sibling.next_sibling
         data_list = tender_data.select('li')
+        tender_page_url = item.select('a')[0].get('href', None)
+        targets = [data_list[2].string, data_list[3].string]
+        role_found = False
 
-        if (role in data_list[2].string) or (role in data_list[3].string):
+        if any(role in t for t in targets):
+            role_found = True
+        elif any(MULTIPLE in t.lower() for t in targets):
+            page_response = http_request(tender_page_url)
+            page_soup = soup_maker(page_response.content)
+            if handle_tender_with_multiple_roles(page_soup, role):
+                role_found = True
+
+        if role_found:
             filtered.append([
                 item.string,
                 data_list[0].string,
                 item.select('a')[0].get('href', None)
             ])
-        elif (MULTIPLE in data_list[2].string.lower()) or (MULTIPLE in data_list[3].string.lower()):
-            tender_page_url = item.select('a')[0].get('href', None)
-            page_response = http_request(tender_page_url)
-            page_soup = soup_maker(page_response.content)
-            if handle_tender_with_multiple_roles(page_soup, role):
-                filtered.append([
-                    item.string,
-                    data_list[0].string,
-                    item.select('a')[0].get('href', None)
-                ])
 
     return filtered
 
