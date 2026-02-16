@@ -5,18 +5,23 @@ base_dir = Path("tests/mocks")
 
 class TestScrapper:
     """Contains the tests fot the scrapper features"""
+
+    # boilerplate
     with open(Path(base_dir/'mock_site.html').resolve(), 'r', encoding='utf-8') as file:
         mock_website = file.read()
 
     with open(Path(base_dir/'mock_tender_page.html').resolve(), 'r', encoding='utf-8') as file2:
         mock_tender_page = file2.read()
 
+    mock_website_soup = s.soup_maker(mock_website)
+    mock_tender_soup = s.soup_maker(mock_tender_page)
+
     def test_get_available_tenders(self):
         """should return a list with available tenders filtered by an determined area"""
         AREA = "TRT"
         EXPECTED = '[<h4><a href="https://exemple.com" rel="noopener" target="_blank">Concurso TRT PI</a></h4>, <h4><a href="https://exemple.com" rel="noopener" target="_blank">Concurso TRT RS</a></h4>, <h4><a href="https://exemple.com" rel="noopener" target="_blank">Concurso TRT MT</a></h4>, <h4><a href="https://exemple.com" rel="noopener" target="_blank">Concurso TRT PR</a></h4>]'
 
-        actual = s.get_available_tenders(self.mock_website, AREA)
+        actual = s.get_available_tenders(self.mock_website_soup, AREA)
         assert EXPECTED == str(actual)
 
 
@@ -27,18 +32,18 @@ class TestScrapper:
         EXPECTED = [['Concurso TJ AL', 'Situação atual: comissão formada', 'https://exemple.com'],
                     ['Concurso TJ PB', 'Situação atual: comissão formada', 'https://exemple.com']]
 
-        testing_tenders = s.get_available_tenders(self.mock_website, AREA)
+        testing_tenders = s.get_available_tenders(self.mock_website_soup, AREA)
         actual = s.filter_tenders_by_role(testing_tenders, ROLE)
         assert EXPECTED == actual
 
     def test_multiple_roles_with_selected(self):
         """Should return TRUE when role IS found in tender's page"""
-        actual = s.handle_tender_with_multiple_roles(self.mock_tender_page, "Oficial de Justiça")
+        actual = s.handle_tender_with_multiple_roles(self.mock_tender_soup, "Oficial de Justiça")
 
         assert actual is True
 
     def test_multiple_roles_without_selected(self):
         """Should return FALSE when role is NOT found in tender's page"""
-        actual = s.handle_tender_with_multiple_roles(self.mock_tender_page, "Perito Criminal")
+        actual = s.handle_tender_with_multiple_roles(self.mock_tender_soup, "Perito Criminal")
 
         assert actual is False
