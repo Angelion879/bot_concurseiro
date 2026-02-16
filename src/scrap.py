@@ -10,7 +10,8 @@ def scrapper(area, role):
     """handles the other functions and their needs"""
 
     http_res = http_request(URL)
-    tender_list = get_available_tenders(http_res.content, area)
+    tenders_soup = soup_maker(http_res.content)
+    tender_list = get_available_tenders(tenders_soup, area)
     filtered_list = filter_tenders_by_role(tender_list, role)
 
     return filtered_list
@@ -27,12 +28,17 @@ def http_request(page_url):
 
     return res
 
+def soup_maker(html_content):
+    """creates the soup with html content"""
 
-def get_available_tenders(http_response, area):
+    soup = bs(html_content, 'html.parser')
+
+    return soup
+
+def get_available_tenders(tender_soup, area):
     """returns a list with all available tenders in the determined area"""
 
-    html_content = bs(http_response, 'html.parser')
-    tenders = html_content.find_all("h4", string=re.compile(area))
+    tenders = tender_soup.find_all("h4", string=re.compile(area))
 
     return tenders
 
@@ -56,7 +62,8 @@ def filter_tenders_by_role(tenders, role):
         elif (MULTIPLE in data_list[2].string.lower()) or (MULTIPLE in data_list[3].string.lower()):
             tender_page_url = item.select('a')[0].get('href', None)
             page_response = http_request(tender_page_url)
-            if handle_tender_with_multiple_roles(page_response.content, role):
+            page_soup = soup_maker(page_response.content)
+            if handle_tender_with_multiple_roles(page_soup, role):
                 filtered.append([
                     item.string,
                     data_list[0].string,
@@ -65,11 +72,10 @@ def filter_tenders_by_role(tenders, role):
 
     return filtered
 
-def handle_tender_with_multiple_roles(tender_page, role):
+def handle_tender_with_multiple_roles(page_soup, role):
     """when the tender does not have the roles in the description, visit its page to check"""
 
-    tender_content = bs(tender_page, 'html.parser')
-    is_role_there = tender_content.find(string=re.compile(role))
+    is_role_there = page_soup.find(string=re.compile(role))
 
     return True if is_role_there else False
 
