@@ -6,13 +6,14 @@ base_dir = Path("tests/mocks")
 class TestMessenger:
     """Contains the tests fot the messenger file features"""
 
+    #boilerplate
     with open(base_dir/'mock_site.html', 'r', encoding='utf-8') as file:
         mock_website = file.read()
 
-    #boilerplate
     AREA = "TJ"
     ROLE = "Oficial de Justiça"
-    available = scrap.get_available_tenders(mock_website, AREA)
+    mock_soup = scrap.soup_maker(mock_website)
+    available = scrap.get_available_tenders(mock_soup, AREA)
     filtered = scrap.filter_tenders_by_role(available, ROLE)
 
     def test_message_builder(self):
