@@ -9,8 +9,7 @@ URL = 'https://blog.grancursosonline.com.br/concursos-2026/'
 def scrapper(area, role):
     """handles the other functions and their needs"""
 
-    http_res = http_request(URL)
-    tenders_soup = soup_maker(http_res.content)
+    tenders_soup = visit_page(URL)
     tender_list = get_available_tenders(tenders_soup, area)
     filtered_list = filter_tenders_by_role(tender_list, role)
 
@@ -35,6 +34,14 @@ def soup_maker(html_content):
 
     return soup
 
+def visit_page(url):
+    """unifies the process of getting the html content from a web page"""
+
+    page_resp = http_request(url)
+    page_soup = soup_maker(page_resp.content)
+
+    return page_soup
+
 def get_available_tenders(tender_soup, area):
     """returns a list with all available tenders in the determined area"""
 
@@ -51,29 +58,31 @@ def filter_tenders_by_role(tenders, role):
 
     for i, item in enumerate(tenders):
         tender_data = tenders[i].next_sibling.next_sibling.next_sibling.next_sibling
+        # work around tender metadata
         data_list = tender_data.select('li')
         tender_page_url = item.select('a')[0].get('href', None)
+
+        tender_status = data_list[0].string
         targets = [data_list[2].string, data_list[3].string]
         role_found = False
 
         if any(role in t for t in targets):
             role_found = True
         elif any(MULTIPLE in t.lower() for t in targets):
-            page_response = http_request(tender_page_url)
-            page_soup = soup_maker(page_response.content)
-            if handle_tender_with_multiple_roles(page_soup, role):
+            page_soup = visit_page(tender_page_url)
+            if tender_with_multiple_roles_has_selected(page_soup, role):
                 role_found = True
 
         if role_found:
             filtered.append([
-                item.string,
-                data_list[0].string,
-                item.select('a')[0].get('href', None)
+                item.string, # tender title
+                tender_status,
+                tender_page_url
             ])
 
     return filtered
 
-def handle_tender_with_multiple_roles(page_soup, role):
+def tender_with_multiple_roles_has_selected(page_soup, role):
     """when the tender does not have the roles in the description, visit its page to check"""
 
     is_role_there = page_soup.find(string=re.compile(role))

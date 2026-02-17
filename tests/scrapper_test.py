@@ -38,12 +38,12 @@ class TestScrapper:
 
     def test_multiple_roles_with_selected(self):
         """Should return TRUE when role IS found in tender's page"""
-        actual = s.handle_tender_with_multiple_roles(self.mock_tender_soup, "Oficial de Justiça")
+        actual = s.tender_with_multiple_roles_has_selected(self.mock_tender_soup, "Oficial de Justiça")
 
         assert actual is True
 
     def test_multiple_roles_without_selected(self):
         """Should return FALSE when role is NOT found in tender's page"""
-        actual = s.handle_tender_with_multiple_roles(self.mock_tender_soup, "Perito Criminal")
+        actual = s.tender_with_multiple_roles_has_selected(self.mock_tender_soup, "Perito Criminal")
 
         assert actual is False
